@@ -1,0 +1,17 @@
+NOTICE
+======
+
+The MIT licence in LICENSE covers the code and documentation written by team AAAAG in this
+repository, and the network weights in models/. What it does not cover:
+
+- vendor/mtah2027/ contains the organisers' code, documentation and public 5-minute ground truth
+  (copyright Metrica Sports), under their own MIT licence: see vendor/mtah2027/LICENSE.
+- The match data (videos, tracking, Smart Tagging, homography) is NOT in this repository and is not
+  covered by any licence here. It is licensed separately to enrolled participants for this
+  competition only.
+- The network weights in models/ are our work and are covered by the MIT licence in LICENSE. They were
+  trained on third-party datasets of other matches: PFF FC's World Cup 2022 tracking (PFF FC's
+  terms), the DFL / Sportec IDSSE dataset (Bassek et al. 2025, CC BY 4.0) and statistics of Metrica
+  Sports' sample data. Those datasets are NOT in this repository and are not covered by any licence
+  here; their own terms apply to them. Sources and credits: docs/EXTERNAL_DATA.md.
+

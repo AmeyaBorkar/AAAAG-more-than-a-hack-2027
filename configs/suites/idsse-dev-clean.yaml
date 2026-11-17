@@ -1,0 +1,14 @@
+name: idsse-dev-clean-v1
+description: >
+  The five IDSSE dev matches (DFL/Sportec, CC BY 4.0), labelled from the provider's BallStatus and
+  BallPossession, with CLEAN tracking: the ball is never missing and slots are true identities. An
+  upper bound and a check on real labels, NOT the selector: select on the degraded `idsse-dev`
+  suite once degrade-v1 lands (docs/VALIDATION.md). The exam matches J03WQQ and J03WN1 are sealed
+  (docs/decisions/2026-10-30-seal-the-idsse-exam-j03wqq-j03wn1.md). Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX}}
+  - {name: idsse, params: {match_id: J03WOH}}
+  - {name: idsse, params: {match_id: J03WOY}}
+  - {name: idsse, params: {match_id: J03WPY}}
+  - {name: idsse, params: {match_id: J03WR9}}

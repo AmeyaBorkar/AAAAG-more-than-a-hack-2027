@@ -1,0 +1,35 @@
+name: idsse-dev-v5
+description: >
+  The five IDSSE dev matches x five seeds of degrade-v5 (#50): the ball hidden through every
+  provider stoppage with onset and return lags measured on Metrica, plus alive gaps with Metrica's
+  per-context hazards and lengths (configs/degrade/degrade-v5.yaml, fitted on the three Metrica
+  sample games only; ADR 2026-11-05). Nothing comes from BAR-ATH. Track slots stay clean (players
+  are v5.1). A change is adopted only if it also wins on the two jitter rungs,
+  idsse-dev-v5-j05 and idsse-dev-v5-j2. Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 4}}}

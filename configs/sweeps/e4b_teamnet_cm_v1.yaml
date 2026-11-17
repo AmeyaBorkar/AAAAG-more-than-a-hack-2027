@@ -1,0 +1,18 @@
+# E4b (#86): the E4 recipe sweep repeated on the adopted control-memory recipe (E14), declared in the issue before
+# the first trial. Same space and sampler seed as E4, so trials 1-7 are the same points; trial 0 is the control-memory
+# baseline. Scored with `lomo --pipeline joint` and the 0.5 s vote, so the sweep isolates the network recipe.
+name: e4b-teamnet-cm-v1
+issue: 86
+base_run: configs/ml/team_control_memory.yaml
+trials: 7                   # K sampled trials; the base is trial 0, so 8 in all
+seed: 20261108              # sampler seed
+lomo_args: ["--pipeline", "joint"]
+space:
+  train.steps: {choices: [2000, 3000, 4000]}
+  model.d_model: {choices: [64, 96]}
+  model.dilations: {choices: [[1, 2, 4, 8, 16, 32, 64], [1, 2, 4, 8, 16, 32, 64, 128]]}
+  train.decouple_prob: {uniform: [0.3, 0.7]}
+  train.aux_weight: {choices: [0.0, 0.2, 0.5]}
+  train.lr: {loguniform: [0.001, 0.004]}
+simplicity: [model.d_model, model.n_blocks, train.steps]
+seeds: [0, 1, 2, 3, 4]

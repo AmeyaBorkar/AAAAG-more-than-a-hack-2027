@@ -1,0 +1,18 @@
+name: possession_missing_1s
+description: >
+  #62 arm B: possession_control_v1_hw12 with the ballstate `ball_missing` cue at weight 1.0 and
+  nothing fitted: a fixed +10 LLR on every frame of an unseen-ball run lasting 1.0 s or more,
+  no opinion otherwise ("a ball missing for a second is dead").
+evidence:
+  - name: control_possession
+    params: {reach_m: 1.0, hold_frames: 3}
+  - name: ballstate
+    params:
+      weights: {ball_missing: 1.0}
+      ball_missing: {bounds_s: [1.0], llr: [null, 10.0], closed: left}
+fusion:
+  name: factorised
+  params: {dead_from: [ballstate], team_first_from: [ballstate]}
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 12, min_dead_s: 2.0, min_alive_s: 1.0}

@@ -1,0 +1,61 @@
+# E81 (#86): the E56a recipe (v11b's network recipe) with attention over time instead of the dilated
+# temporal convolutions. The per-frame player transformer, the heads, the data, the augmentations and the
+# schedule are E56a's, unchanged; only the temporal stack differs (src/aaaag/ml/archs/team_net_tx.py).
+# The reach is +-128 frames against v11b's +-127, so the test is attention against convolution, not context.
+arch: team_net_tx
+token:
+  tokens_per_team: 11        # the nearest observed slots of each team to the ball (else the centroid)
+  velocity_half_s: 0.2       # centred difference over +-0.2 s
+  max_player_speed: 12.0     # above this a velocity is a slot swap or a jump: zeroed
+  max_ball_speed: 45.0
+  velocity_scale: 8.0
+  ref_scale_m: 20.0
+  gap_cap_s: 30.0
+  control_memory: true       # ball token: last controller (+1/-1) and log age of that run
+  contact_inputs: true       # BALL_DV, TOUCH_TEAM, CTRL_NOW on the ball; ACCEL on players
+
+model:                       # about 0.2M parameters, receptive field +-127 frames (5.1 s)
+  n_features: 20             # 16 control-memory columns plus BALL_DV, TOUCH_TEAM, CTRL_NOW, ACCEL
+  d_model: 64
+  n_heads: 4
+  n_blocks: 2
+  ffn_mult: 2
+  t_blocks: 2               # attention blocks over the frames (E81), in place of the dilated convolutions
+  t_radius: 64              # each frame attends to +-64 frames per block: +-128 in total (v11b: +-127)
+  t_heads: 4
+  dropout: 0.1
+  switch_head: true          # one logit per frame: a home/away switch happens here
+  possessor_head: true       # per-token possessor; team sums join the frame embedding
+
+train:
+  restart_blank_p: 0.5
+  restart_blank_before_s: 1.0
+  restart_blank_after_s: 3.0
+  seed: 0
+  steps: 2000                # 20 variant sets of 100 steps
+  refresh_steps: 100         # fresh degradation of every training match every 100 steps
+  batch_size: 16
+  window: 1000               # frames (40 s); the loss skips the 127 frames at each window edge
+  lr: 0.002
+  final_lr_frac: 0.02
+  warmup_steps: 100
+  weight_decay: 0.05
+  grad_clip: 1.0
+  aux_weight: 0.2            # ball-position head, on alive frames where the ball is hidden
+  decouple_prob: 0.5         # share of batches whose ball visibility ignores the labels
+  switch_weight: 0.2         # BCE on the switch head (0 leaves the loss unchanged)
+  switch_tol_frames: 3       # H/A frames within this many frames of a direct H-A change
+  switch_pos_weight: 20.0    # positive frames are rare
+  possessor_weight: 0.2      # cross-entropy on the possessor head (0 leaves the loss unchanged)
+  possessor_reach_m: 2.0     # a player farther than this from the clean ball is not a target
+  flip_y: true
+  swap_teams: true
+  amp: true                  # bf16 autocast on CUDA
+  degrade:                   # draws per match per set; physics priors and Metrica fits only
+    version: '5'
+    ladders: [null, v51-mild, v51-medium, v51-severe, v51-medium-nearball]
+    ladder_p: [0.30, 0.15, 0.20, 0.20, 0.15]
+    jitter_s: [0.0, 0.5, 2.0]
+    jitter_p: [0.50, 0.25, 0.25]
+  augment:
+    ball_smooth: {p: 0.65, sigma_frames: [2.0, 4.0, 6.0, 8.0, 10.0]}

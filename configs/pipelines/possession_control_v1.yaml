@@ -1,0 +1,16 @@
+name: possession_control_v1
+description: >
+  #58 arm A: ballstate_v1_team with `nearest_player` replaced by `control_possession` (the team of
+  the last player within 1.0 m of the ball for 3 frames, held through passes and gaps). The hold
+  already smooths, so the dead-gated vote runs with no window (half_window 0). Ball state, the
+  restarting side and the stoppage cleaning are ballstate_v1_team's.
+evidence:
+  - name: control_possession
+    params: {reach_m: 1.0, hold_frames: 3}
+  - name: ballstate
+fusion:
+  name: factorised
+  params: {dead_from: [ballstate], team_first_from: [ballstate]}
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 0, min_dead_s: 2.0, min_alive_s: 1.0}

@@ -1,0 +1,32 @@
+name: idsse-dev-v5-j2
+description: >
+  Robustness rung of idsse-dev-v5 (#50): as idsse-dev-v5, with both ends of every hidden stoppage
+  shifted independently by U(-2, +2) s, in case BAR-ATH blanks the dead ball much less exactly
+  than Metrica. Declared before any run. Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 0, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 1, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 2, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 3, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 4, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 0, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 1, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 2, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 3, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 4, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 0, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 1, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 2, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 3, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 4, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 0, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 1, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 2, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 3, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 4, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 0, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 1, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 2, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 3, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 4, edge_jitter_s: 2.0}}}

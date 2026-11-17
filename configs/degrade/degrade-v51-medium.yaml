@@ -1,0 +1,10 @@
+name: v51-medium
+description: >
+  degrade-v5.1 player ladder, rung "medium" (#73): physical priors fixed before any run, not
+  calibrated on BAR-ATH (ADR 2026-11-05). Applied on top of degrade-v5's ball (ladder.py).
+dropout_share: 0.10
+dropout_mean_s: 2.0
+noise_sigma_m: 0.25
+noise_smooth_s: 0.25
+near_ball_factor: 1.0
+near_ball_m: 5.0

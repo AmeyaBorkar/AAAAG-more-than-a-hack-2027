@@ -1,0 +1,32 @@
+name: idsse-dev-v5-j2-s59
+description: >
+  idsse-dev-v5-j2 with fresh degradation draws: seeds 5-9 instead of 0-4, the same five IDSSE dev
+  matches and settings otherwise. Written for the confirmation run of #69 before it ran, so
+  that a setting picked on seeds 0-4 (#66) is tested on draws it never saw. Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 5, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 6, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 7, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 8, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 9, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 5, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 6, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 7, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 8, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 9, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 5, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 6, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 7, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 8, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 9, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 5, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 6, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 7, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 8, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 9, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 5, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 6, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 7, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 8, edge_jitter_s: 2.0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 9, edge_jitter_s: 2.0}}}

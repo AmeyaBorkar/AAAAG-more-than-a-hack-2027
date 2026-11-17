@@ -1,0 +1,9 @@
+name: official_baseline_smooth25
+description: Exact reproduction of the organisers' baseline_smooth25 (window +/-25). Parity reference.
+evidence:
+  - name: nearest_player
+    params: {when_unseen: dead}
+fusion: first
+decoder:
+  name: majority_vote
+  params: {half_window: 25, per_period: false, outside: keep}

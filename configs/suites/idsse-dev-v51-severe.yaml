@@ -1,0 +1,32 @@
+name: idsse-dev-v51-severe
+description: >
+  The five IDSSE dev matches x five seeds of degrade-v5 (#50) plus the v5.1 player ladder rung
+  "severe" (#73, configs/degrade/degrade-v51-severe.yaml): physical priors, nothing from BAR-ATH. A
+  robustness check for pipelines that read player positions near the ball. Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 0, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 1, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 2, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 3, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5', seed: 4, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 0, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 1, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 2, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 3, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5', seed: 4, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 0, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 1, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 2, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 3, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5', seed: 4, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 0, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 1, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 2, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 3, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5', seed: 4, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 0, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 1, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 2, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 3, ladder: v51-severe}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5', seed: 4, ladder: v51-severe}}}

@@ -1,0 +1,11 @@
+name: nearest_vote_per_period
+description: >
+  The baseline made well-behaved: same evidence and vote, but decoded per period (no smoothing
+  across half-time) with X outside the graded halves. Starting template for new pipelines.
+evidence:
+  - name: nearest_player
+    params: {when_unseen: dead}
+fusion: first
+decoder:
+  name: majority_vote
+  params: {half_window: 50}

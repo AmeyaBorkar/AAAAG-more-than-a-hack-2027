@@ -1,0 +1,57 @@
+# Control-memory run plus the contact columns (E17) and the learned switch head (E19), together,
+# plus ball smoothing in training. Same schedule as team_control_memory.yaml.
+# `token.contact_inputs` adds four columns, so `model.n_features` is 20; `model.switch_head`
+# adds a per-frame switch logit trained by `train.switch_weight` (BCE, `switch_pos_weight`) on
+# frames within `switch_tol_frames` of a direct H-A change. The decoder reads it through
+# `switch_weight` in the pipeline YAML. `train.augment.ball_smooth` applies a Gaussian of 2, 4
+# or 6 frames with probability 0.6 (no smoothing with probability 0.4; each sigma with 0.2).
+# Read by `python -m aaaag.ml train|lomo --run configs/ml/team_cm_contact_switch_smooth.yaml`.
+token:
+  tokens_per_team: 11        # the nearest observed slots of each team to the ball (else the centroid)
+  velocity_half_s: 0.2       # centred difference over +-0.2 s
+  max_player_speed: 12.0     # above this a velocity is a slot swap or a jump: zeroed
+  max_ball_speed: 45.0
+  velocity_scale: 8.0
+  ref_scale_m: 20.0
+  gap_cap_s: 30.0
+  control_memory: true       # ball token: last controller (+1/-1) and log age of that run
+  contact_inputs: true       # BALL_DV, TOUCH_TEAM, CTRL_NOW on the ball; ACCEL on players
+
+model:                       # about 0.2M parameters, receptive field +-127 frames (5.1 s)
+  n_features: 20             # 16 control-memory columns plus BALL_DV, TOUCH_TEAM, CTRL_NOW, ACCEL
+  d_model: 64
+  n_heads: 4
+  n_blocks: 2
+  ffn_mult: 2
+  dilations: [1, 2, 4, 8, 16, 32, 64]
+  kernel: 3
+  dropout: 0.1
+  switch_head: true          # one logit per frame: a home/away switch happens here
+
+train:
+  seed: 0
+  steps: 2000                # 20 variant sets of 100 steps
+  refresh_steps: 100         # fresh degradation of every training match every 100 steps
+  batch_size: 16
+  window: 1000               # frames (40 s); the loss skips the 127 frames at each window edge
+  lr: 0.002
+  final_lr_frac: 0.02
+  warmup_steps: 100
+  weight_decay: 0.05
+  grad_clip: 1.0
+  aux_weight: 0.2            # ball-position head, on alive frames where the ball is hidden
+  decouple_prob: 0.5         # share of batches whose ball visibility ignores the labels
+  switch_weight: 0.2         # BCE on the switch head (0 leaves the loss unchanged)
+  switch_tol_frames: 3       # H/A frames within this many frames of a direct H-A change
+  switch_pos_weight: 20.0    # positive frames are rare
+  flip_y: true
+  swap_teams: true
+  amp: true                  # bf16 autocast on CUDA
+  degrade:                   # draws per match per set; physics priors and Metrica fits only
+    version: '5'
+    ladders: [null, v51-mild, v51-medium, v51-severe, v51-medium-nearball]
+    ladder_p: [0.30, 0.15, 0.20, 0.20, 0.15]
+    jitter_s: [0.0, 0.5, 2.0]
+    jitter_p: [0.50, 0.25, 0.25]
+  augment:
+    ball_smooth: {p: 0.6, sigma_frames: [2.0, 4.0, 6.0]}

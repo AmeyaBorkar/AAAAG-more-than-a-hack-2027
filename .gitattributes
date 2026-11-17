@@ -1,0 +1,10 @@
+# Normalise line endings so hashes, diffs and submission bytes are identical on every OS.
+* text=auto eol=lf
+
+# The organisers' code, docs and ground truth are byte-exact copies of the upstream git blobs.
+# Never convert them: tests/test_vendor_integrity.py checks their SHA-256 against UPSTREAM.json.
+vendor/** -text
+
+*.png binary
+*.jpg binary
+*.pdf binary

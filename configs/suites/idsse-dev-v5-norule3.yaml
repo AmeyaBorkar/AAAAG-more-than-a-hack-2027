@@ -1,0 +1,33 @@
+name: idsse-dev-v5-norule3
+description: >
+  Harsher rung of idsse-dev-v5 (#62): IDSSE dev degraded by degrade-v5n, the v5 fit on Metrica
+  WITHOUT rule 3, so Metrica's long event-free gaps count as alive gaps (live play with the ball
+  missing), in case they are live play after all. It bounds a bet that a missing ball means a
+  dead one. Declared and frozen before any run of #62's arms. Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5n', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5n', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5n', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5n', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '5n', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5n', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5n', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5n', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5n', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '5n', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5n', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5n', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5n', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5n', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '5n', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5n', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5n', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5n', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5n', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '5n', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5n', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5n', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5n', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5n', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '5n', seed: 4}}}

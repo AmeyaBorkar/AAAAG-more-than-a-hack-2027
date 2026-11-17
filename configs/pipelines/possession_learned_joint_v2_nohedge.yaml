@@ -1,0 +1,26 @@
+name: possession_learned_joint_v2_nohedge
+description: >
+  v2 without the hedge (#86, E14): the two learned heads, the dead-gated semi-Markov decoder plus the two free small gains of the stack audit: the dead
+  threshold of the gate lowered to 0.4 (the network's dead error is now on the missed side) and the
+  gaining-team touch snap of every H<->A boundary within +-2 s. Cost at inference: the network
+  forward (about 130 s per model in numpy float64, one thread) plus under a second. A seed ensemble
+  (`weights` as a list, logits averaged) adds one forward per member. No rule-based ball state.
+evidence:
+- name: learned_team
+  params:
+    weights: [models/learned_joint_v0.pt]
+    sha256: [1d8b97d49d223100]
+    device: cpu
+    threads: 1
+    output: joint
+fusion:
+  name: factorised
+  params:
+    dead_from: [learned_team]
+    team_from: [learned_team]
+decoder:
+  name: dead_gated_hsmm
+  params: {lam_team: 0.6, beta: 0.0, refine_s: 0.0, dead_threshold: 0.4}
+postprocess:
+- name: touch_snap
+  params: {window_s: 2.0}

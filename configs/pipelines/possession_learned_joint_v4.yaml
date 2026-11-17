@@ -1,0 +1,35 @@
+# Candidate v4 (#86): E29b, the control-memory network plus the four contact columns (E17), the possessor
+# head (E18) and the learned switch head (E19), trained with wide ball smoothing (sd 2-10 frames, E28), read
+# by the semi-Markov decoder at switch_weight 2 (E19's selection). The stack decision of 7 Nov (#86).
+# Production weights: `python -m aaaag.ml train --run configs/ml/team_cm_contact_both_smooth_wide.yaml --holdout none
+# --seed N` for N = 0..2 on the five IDSSE dev matches, exported with `python -m aaaag.ml.export`, pinned below.
+# The JSON weights are local until the freeze PR commits them.
+name: possession_learned_joint_v4
+description: >
+  Candidate v4 (#86). E29b: control memory plus the contact columns (E17), the possessor head (E18) and a learned
+  switch head (E19), trained with wide ball smoothing (E28), three seeds trained on the five IDSSE dev matches
+  (logits averaged) and two mirrored views, both heads through
+  factorised fusion, the dead-gated semi-Markov decoder with a 0.4 dead threshold and a switch bonus at weight 2,
+  then the gaining-team touch snap and a 1.5 s minimum possession (E7, kept by E34's minimax). Dev
+  (leave-one-match-out fold models, seeds 5-9) against E19: clean -0.0004 (seeds 0+1) and -0.0046 (seeds 2+3)
+  on the three-truth mean; on an 8-frame-smoothed ball (S8, a smoothing stress) +0.061 and +0.057. The fall-back stays possession_control_v1_hw12; v3 stays a YAML swap.
+evidence:
+- name: learned_team
+  params:
+    backend: numpy
+    weights: [models/csb_all5_seed0.json, models/csb_all5_seed1.json, models/csb_all5_seed2.json]
+    sha256: [e4de2f0843487d18, ef3d0efb724effe0, cb3d0ddf5e5ead9d]
+    output: joint
+    views: 2
+    workers: 4
+fusion:
+  name: factorised
+  params: {dead_from: [learned_team], team_from: [learned_team]}
+decoder:
+  name: dead_gated_hsmm
+  params: {lam_team: 0.6, beta: 0.0, refine_s: 0.0, dead_threshold: 0.4, switch_weight: 2.0}
+postprocess:
+- name: touch_snap
+  params: {window_s: 2.0}
+- name: min_spell
+  params: {min_s: 1.5}

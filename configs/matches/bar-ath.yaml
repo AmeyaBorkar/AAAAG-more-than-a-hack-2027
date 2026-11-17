@@ -1,0 +1,11 @@
+# Match-level metadata for the competition match: names and spellings only.
+# Never put labels, frame numbers, or thresholds tuned to this match here (docs/COMPLIANCE.md).
+# Frame count, fps, pitch size and the graded halves come from the organisers' games.py.
+match_id: BAR-ATH
+home: FC Barcelona
+away: Athletic Club
+# How the Smart Tagging spells each side (matched case-insensitively). "N/A" deliberately maps to
+# no side: every throw-in carries it, and inferring the side is a modelling problem, not a lookup.
+team_aliases:
+  home: [Barcelona, FC Barcelona]
+  away: [Atletic Club, Athletic Club, Athletic]

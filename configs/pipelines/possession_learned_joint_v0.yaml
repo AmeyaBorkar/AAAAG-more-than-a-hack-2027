@@ -1,0 +1,23 @@
+name: possession_learned_joint_v0
+description: >
+  Candidate v0 (#86, E9, E11): the network's own heads for both factors, P(dead) and P(home | alive),
+  through factorised fusion and the champion's 0.5 s dead-gated vote. No rule-based ball state: the
+  missing-ball cue, the HMM and the restart-side lean are out (E9: P(dead) from the network wins on
+  v5, v5n and real Metrica tracking; E11: the lean hurts). `weights` is the file
+  `python -m aaaag.ml train --holdout none` writes (five IDSSE dev matches, external data only); it is
+  not tracked, so a run needs it in place, and `sha256` pins it. The fall-back stays
+  `possession_control_v1_hw12`.
+evidence:
+- name: learned_team
+  params:
+    weights: models/learned_joint_v0.pt
+    sha256: 1d8b97d49d223100
+    device: cpu
+    threads: 1
+    output: joint
+fusion:
+  name: factorised
+  params: {dead_from: [learned_team], team_from: [learned_team]}
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 12, min_dead_s: 2.0, min_alive_s: 1.0}

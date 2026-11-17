@@ -1,0 +1,16 @@
+name: ballstate_v1_team
+description: >
+  ballstate_v1 plus one change (#31): for the second after each restart that the ball-state lane
+  types and attributes (restarts.py: kick-off formation, else the ball's spot and the player at
+  it), the restarting side replaces the nearest-player team opinion in the fusion. By the Laws
+  that side takes the restart, so play starts in its possession. Everything else is ballstate_v1.
+evidence:
+  - name: nearest_player
+    params: {when_unseen: abstain}
+  - name: ballstate
+fusion:
+  name: factorised
+  params: {dead_from: [ballstate], team_first_from: [ballstate]}
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 50, min_dead_s: 2.0, min_alive_s: 1.0}

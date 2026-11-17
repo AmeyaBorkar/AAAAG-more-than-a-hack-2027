@@ -1,0 +1,73 @@
+# E84F production (#86): fine-tune of the shipped prod7_e56a_seed1 (all 7 IDSSE matches) from its own weights; dead_visible_p 0.2, seed 101.
+# Record of the exact config used (#86, E84). Fold seed s uses e56a_seed{s}; the control C sets dead_visible_p 0. init_from is the training machine's cache path.
+# E71b (#86): E71 at dead_visible_p 0.2 (a dose check; E71 at 0.5 failed on clean, #86). In the coupled variant, each true stoppage of at least 4 s
+# shows the uncarried dead ball for its last 3 s with probability 0.5 (dead_ball_visible), then
+# restart_blank still hides the restart. Round values, not fitted. Everything else is E56a.
+# E29b: E28's wide ball-smoothing recipe with both heads (possessor and switch).
+# E28: E19's recipe trained on a wider range of ball smoothing (sd 2-10 frames, p 0.65), so the target's
+# measured regime (label-free, #86; the figures stay private) is inside the training range.
+# Control-memory run plus the contact columns (E17) and the learned switch head (E19), together,
+# plus ball smoothing in training. Same schedule as team_control_memory.yaml.
+# `token.contact_inputs` adds four columns, so `model.n_features` is 20; `model.switch_head`
+# adds a per-frame switch logit trained by `train.switch_weight` (BCE, `switch_pos_weight`) on
+# frames within `switch_tol_frames` of a direct H-A change. The decoder reads it through
+# `switch_weight` in the pipeline YAML. `train.augment.ball_smooth` applies a Gaussian of 2, 4, 6,
+# 8 or 10 frames with probability 0.65 (no smoothing with probability 0.35; each sigma with 0.13).
+# Read by `python -m aaaag.ml train|lomo --run configs/ml/team_cm_contact_switch_smooth_wide.yaml`.
+token:
+  tokens_per_team: 11        # the nearest observed slots of each team to the ball (else the centroid)
+  velocity_half_s: 0.2       # centred difference over +-0.2 s
+  max_player_speed: 12.0     # above this a velocity is a slot swap or a jump: zeroed
+  max_ball_speed: 45.0
+  velocity_scale: 8.0
+  ref_scale_m: 20.0
+  gap_cap_s: 30.0
+  control_memory: true       # ball token: last controller (+1/-1) and log age of that run
+  contact_inputs: true       # BALL_DV, TOUCH_TEAM, CTRL_NOW on the ball; ACCEL on players
+
+model:                       # about 0.2M parameters, receptive field +-127 frames (5.1 s)
+  n_features: 20             # 16 control-memory columns plus BALL_DV, TOUCH_TEAM, CTRL_NOW, ACCEL
+  d_model: 64
+  n_heads: 4
+  n_blocks: 2
+  ffn_mult: 2
+  dilations: [1, 2, 4, 8, 16, 32, 64]
+  kernel: 3
+  dropout: 0.1
+  switch_head: true          # one logit per frame: a home/away switch happens here
+  possessor_head: true       # per-token possessor; team sums join the frame embedding
+
+train:
+  restart_blank_p: 0.5
+  restart_blank_before_s: 1.0
+  restart_blank_after_s: 3.0
+  dead_visible_p: 0.2
+  init_from: C:/Users/ameya/aaaag-cache/runs/prod7_e56a_seed1/final.pt
+  seed: 0
+  steps: 1000                # E84: fine-tune, 10 variant sets of 100 steps
+  refresh_steps: 100         # fresh degradation of every training match every 100 steps
+  batch_size: 16
+  window: 1000               # frames (40 s); the loss skips the 127 frames at each window edge
+  lr: 0.0005
+  final_lr_frac: 0.02
+  warmup_steps: 50
+  weight_decay: 0.05
+  grad_clip: 1.0
+  aux_weight: 0.2            # ball-position head, on alive frames where the ball is hidden
+  decouple_prob: 0.5         # share of batches whose ball visibility ignores the labels
+  switch_weight: 0.2         # BCE on the switch head (0 leaves the loss unchanged)
+  switch_tol_frames: 3       # H/A frames within this many frames of a direct H-A change
+  switch_pos_weight: 20.0    # positive frames are rare
+  possessor_weight: 0.2      # cross-entropy on the possessor head (0 leaves the loss unchanged)
+  possessor_reach_m: 2.0     # a player farther than this from the clean ball is not a target
+  flip_y: true
+  swap_teams: true
+  amp: true                  # bf16 autocast on CUDA
+  degrade:                   # draws per match per set; physics priors and Metrica fits only
+    version: '5'
+    ladders: [null, v51-mild, v51-medium, v51-severe, v51-medium-nearball]
+    ladder_p: [0.30, 0.15, 0.20, 0.20, 0.15]
+    jitter_s: [0.0, 0.5, 2.0]
+    jitter_p: [0.50, 0.25, 0.25]
+  augment:
+    ball_smooth: {p: 0.65, sigma_frames: [2.0, 4.0, 6.0, 8.0, 10.0]}

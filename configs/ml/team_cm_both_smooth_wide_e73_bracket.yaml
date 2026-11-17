@@ -1,0 +1,65 @@
+# E73 (#33, #86; proposed id, the coordinator assigns it): E56a plus the gap-bracket inputs.
+# `token.gap_bracket` appends six ball-token columns, nonzero only while the ball is unseen: the
+# controlling team (+1/-1/0) at the last sighting and from the next sighting on (the control-memory
+# rule, reach 1.0 m, hold 3), and the attack-normalised ball x, y at the last and the next sighting.
+# Why: automatic tracking can leave long ball gaps in open play, longer than training shows, and the
+# dilated stack sees +-127 frames (5.1 s), so a frame deep in a long gap has no ball sighting in its
+# window. The two ends of the gap are a fact of the input, carried to every frame of it.
+# `model.n_features` is 26: E56a's 20 plus the six. Everything else is E56a, unchanged.
+# Nothing in this run is selected on BAR-ATH. Declare on #86 before training it.
+token:
+  tokens_per_team: 11        # the nearest observed slots of each team to the ball (else the centroid)
+  velocity_half_s: 0.2       # centred difference over +-0.2 s
+  max_player_speed: 12.0     # above this a velocity is a slot swap or a jump: zeroed
+  max_ball_speed: 45.0
+  velocity_scale: 8.0
+  ref_scale_m: 20.0
+  gap_cap_s: 30.0
+  control_memory: true       # ball token: last controller (+1/-1) and log age of that run
+  contact_inputs: true       # BALL_DV, TOUCH_TEAM, CTRL_NOW on the ball; ACCEL on players
+  gap_bracket: true          # #33: team and ball position at the two ends of each ball gap
+
+model:                       # about 0.2M parameters, receptive field +-127 frames (5.1 s)
+  n_features: 26             # E56a's 20 plus the six gap-bracket columns
+  d_model: 64
+  n_heads: 4
+  n_blocks: 2
+  ffn_mult: 2
+  dilations: [1, 2, 4, 8, 16, 32, 64]
+  kernel: 3
+  dropout: 0.1
+  switch_head: true          # one logit per frame: a home/away switch happens here
+  possessor_head: true       # per-token possessor; team sums join the frame embedding
+
+train:
+  restart_blank_p: 0.5
+  restart_blank_before_s: 1.0
+  restart_blank_after_s: 3.0
+  seed: 0
+  steps: 2000                # 20 variant sets of 100 steps
+  refresh_steps: 100         # fresh degradation of every training match every 100 steps
+  batch_size: 16
+  window: 1000               # frames (40 s); the loss skips the 127 frames at each window edge
+  lr: 0.002
+  final_lr_frac: 0.02
+  warmup_steps: 100
+  weight_decay: 0.05
+  grad_clip: 1.0
+  aux_weight: 0.2            # ball-position head, on alive frames where the ball is hidden
+  decouple_prob: 0.5         # share of batches whose ball visibility ignores the labels
+  switch_weight: 0.2         # BCE on the switch head (0 leaves the loss unchanged)
+  switch_tol_frames: 3       # H/A frames within this many frames of a direct H-A change
+  switch_pos_weight: 20.0    # positive frames are rare
+  possessor_weight: 0.2      # cross-entropy on the possessor head (0 leaves the loss unchanged)
+  possessor_reach_m: 2.0     # a player farther than this from the clean ball is not a target
+  flip_y: true
+  swap_teams: true
+  amp: true                  # bf16 autocast on CUDA
+  degrade:                   # draws per match per set; physics priors and Metrica fits only
+    version: '5'
+    ladders: [null, v51-mild, v51-medium, v51-severe, v51-medium-nearball]
+    ladder_p: [0.30, 0.15, 0.20, 0.20, 0.15]
+    jitter_s: [0.0, 0.5, 2.0]
+    jitter_p: [0.50, 0.25, 0.25]
+  augment:
+    ball_smooth: {p: 0.65, sigma_frames: [2.0, 4.0, 6.0, 8.0, 10.0]}

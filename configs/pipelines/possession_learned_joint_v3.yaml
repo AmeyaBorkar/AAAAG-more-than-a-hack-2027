@@ -1,0 +1,34 @@
+name: possession_learned_joint_v3
+description: >
+  Candidate v3 (#86): the control-memory network (E14), three seeds trained on the five IDSSE dev
+  matches (logits averaged) and two mirrored views of the input (E15: three models x two views
+  beat five models x one view, and seeds beyond three add nothing), both heads through factorised
+  fusion, the dead-gated semi-Markov decoder with a 0.4 dead threshold, and the gaining-team touch
+  snap, then possessions shorter than 1.5 s are absorbed into the previous one (E7, the
+  label-granularity decision). No hedge (the network reads the rule's control memory itself), no
+  rule-based ball state.
+  Inference is the numpy float64 forward pass from JSON weights, chunks in a process pool
+  (bit-identical to serial). The weights are `python -m aaaag.ml.export` of
+  `python -m aaaag.ml train --run configs/ml/team_control_memory.yaml --holdout none --seed N`,
+  N = 0..2, each pinned by sha256 (seeds 3 and 4 exist and are unused). The fall-back stays
+  `possession_control_v1_hw12`.
+evidence:
+- name: learned_team
+  params:
+    backend: numpy
+    weights: [models/cm_all5_seed0.json, models/cm_all5_seed1.json, models/cm_all5_seed2.json]
+    sha256: [917e2e20458a1add, 9339c8d16f5cacb5, 79c1bb6902354b3e]
+    output: joint
+    views: 2
+    workers: 4
+fusion:
+  name: factorised
+  params: {dead_from: [learned_team], team_from: [learned_team]}
+decoder:
+  name: dead_gated_hsmm
+  params: {lam_team: 0.6, beta: 0.0, refine_s: 0.0, dead_threshold: 0.4}
+postprocess:
+- name: touch_snap
+  params: {window_s: 2.0}
+- name: min_spell
+  params: {min_s: 1.5}

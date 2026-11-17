@@ -1,0 +1,15 @@
+name: ballstate_v1_vote
+description: >
+  ballstate_v1 with the existing per-period majority vote instead of the dead-gated decoder:
+  isolates what the ball-state evidence adds without a decoder change (a stoppage only shows where
+  a whole +/-50 window has no team vote).
+evidence:
+  - name: nearest_player
+    params: {when_unseen: abstain}
+  - name: ballstate
+fusion:
+  name: factorised
+  params: {dead_from: [ballstate]}
+decoder:
+  name: majority_vote
+  params: {half_window: 50}

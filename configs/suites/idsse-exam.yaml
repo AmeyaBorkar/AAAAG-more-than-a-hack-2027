@@ -1,0 +1,16 @@
+name: idsse-exam-v2
+description: >
+  SEALED EXAM (docs/decisions/2026-10-30-seal-the-idsse-exam-j03wqq-j03wn1.md): J03WQQ and J03WN1
+  x five seeds of degrade-v2. Run it only at the re-plan checkpoint (~3 Nov) and at the freeze;
+  never iterate on it, never use it for statistics, tuning or priors.
+matches:
+  - {name: idsse, params: {match_id: J03WQQ, exam: true, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WQQ, exam: true, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WQQ, exam: true, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WQQ, exam: true, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WQQ, exam: true, degrade: {version: '2', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WN1, exam: true, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WN1, exam: true, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WN1, exam: true, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WN1, exam: true, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WN1, exam: true, degrade: {version: '2', seed: 4}}}

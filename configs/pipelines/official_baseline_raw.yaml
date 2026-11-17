@@ -1,0 +1,9 @@
+name: official_baseline_raw
+description: Exact reproduction of the organisers' baseline_raw (no smoothing). Parity reference.
+evidence:
+  - name: nearest_player
+    params: {when_unseen: dead}
+fusion: first
+decoder:
+  name: majority_vote
+  params: {half_window: 0, per_period: false, outside: keep}

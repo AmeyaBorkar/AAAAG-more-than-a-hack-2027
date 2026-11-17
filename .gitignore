@@ -1,0 +1,69 @@
+# -----------------------------------------------------------------------------------------------
+# This repository becomes PUBLIC at submission time. The match data never may.
+# Anything that is, or could reconstruct, the gated match data stays out of git forever:
+# a commit is permanent history even after the file is deleted. When in doubt, add it here first.
+# scripts/policy.py enforces the same rules in the pre-commit hook and in CI.
+# -----------------------------------------------------------------------------------------------
+
+# -- gated match data: keep it OUTSIDE the repo via MTAH_DATA_DIR (docs/ONBOARDING.md) ------------
+data/*
+!data/README.md
+*.mp4
+*.avi
+*.mov
+*.mkv
+*_atd.txt
+*_atd.xml
+*_homography.csv
+*_smart_tagging.xml
+
+# -- private ground truth (upstream naming); the public 5-minute file lives in vendor/ ------------
+*_possession_gt.csv
+*_possession_gt_meta.json
+*_possession_gt_reference.csv
+possession_by_frame.pkl
+
+# -- anything derived per frame: caches, features, predictions, submissions ----------------------
+cache/
+outputs/
+AAAAG.csv
+*.npz
+*.npy
+*.parquet
+*.feather
+*.pkl
+*.pickle
+*.h5
+*.hdf5
+*.joblib
+
+# -- external datasets of other matches: downloaded on demand, licensed separately ---------------
+external_data/
+
+# -- notebooks are personal scratch; promote results to analysis/scripts + a finding -------------
+*.ipynb
+.ipynb_checkpoints/
+
+# -- the official scorer writes these next to itself if run in place -----------------------------
+vendor/mtah2027/evaluation/reports/
+vendor/mtah2027/evaluation/scoreboard.csv
+
+# -- python & tooling ----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# -- editors, OS, local agent settings -----------------------------------------------------------
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.claude/settings.local.json

@@ -1,0 +1,47 @@
+# Baseline run with last-controller memory on the ball token (E14).
+# Same schedule as team_baseline.yaml. `token.control_memory` turns the two extra columns on;
+# `model.n_features` is the base 14 plus those columns (RunConfig does not infer the width).
+# Reach and hold stay at the control_possession defaults (1 m, 3 frames). Units: metres and seconds.
+# Read by `python -m aaaag.ml train|lomo --run configs/ml/team_control_memory.yaml`.
+token:
+  tokens_per_team: 11        # the nearest observed slots of each team to the ball (else the centroid)
+  velocity_half_s: 0.2       # centred difference over +-0.2 s
+  max_player_speed: 12.0     # above this a velocity is a slot swap or a jump: zeroed
+  max_ball_speed: 45.0
+  velocity_scale: 8.0
+  ref_scale_m: 20.0
+  gap_cap_s: 30.0
+  control_memory: true       # ball token: last controller (+1/-1) and log age of that run
+
+model:                       # about 0.2M parameters, receptive field +-127 frames (5.1 s)
+  n_features: 16             # 14 base columns plus CTRL_TEAM and CTRL_AGE
+  d_model: 64
+  n_heads: 4
+  n_blocks: 2
+  ffn_mult: 2
+  dilations: [1, 2, 4, 8, 16, 32, 64]
+  kernel: 3
+  dropout: 0.1
+
+train:
+  seed: 0
+  steps: 2000                # 20 variant sets of 100 steps
+  refresh_steps: 100         # fresh degradation of every training match every 100 steps
+  batch_size: 16
+  window: 1000               # frames (40 s); the loss skips the 127 frames at each window edge
+  lr: 0.002
+  final_lr_frac: 0.02
+  warmup_steps: 100
+  weight_decay: 0.05
+  grad_clip: 1.0
+  aux_weight: 0.2            # ball-position head, on alive frames where the ball is hidden
+  decouple_prob: 0.5         # share of batches whose ball visibility ignores the labels
+  flip_y: true
+  swap_teams: true
+  amp: true                  # bf16 autocast on CUDA
+  degrade:                   # draws per match per set; physics priors and Metrica fits only
+    version: '5'
+    ladders: [null, v51-mild, v51-medium, v51-severe, v51-medium-nearball]
+    ladder_p: [0.30, 0.15, 0.20, 0.20, 0.15]
+    jitter_s: [0.0, 0.5, 2.0]
+    jitter_p: [0.50, 0.25, 0.25]

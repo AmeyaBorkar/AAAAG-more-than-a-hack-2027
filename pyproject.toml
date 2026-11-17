@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aaaag"
+version = "0.1.0"
+description = "Team AAAAG - More than a Hack 2027, Phase 1: frame-level ball possession from automatic tracking"
+readme = "README.md"
+license = { text = "MIT" }
+# Reference interpreter for the submission is CPython 3.13 (see docs/ARCHITECTURE.md#reproducibility).
+# requirements-lock.txt pins numpy/scipy releases that need >= 3.12.
+requires-python = ">=3.12"
+dependencies = [
+  "numpy>=2.2",
+  "pandas>=2.2",
+  "scipy>=1.14",
+  "pyyaml>=6.0",
+  "threadpoolctl>=3.5",  # numpy inference pins BLAS to one thread (aaaag.ml.np_infer)
+]
+
+[project.optional-dependencies]
+ml = ["scikit-learn>=1.6", "lightgbm>=4.5"]
+external = ["kloppy==3.18.0"]
+viz = ["matplotlib>=3.9"]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[project.scripts]
+aaaag = "aaaag.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests", "scripts"]
+extend-exclude = ["vendor"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "NPY"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["aaaag"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+  "data: needs the gated BAR-ATH bundle in data/ (auto-skipped when absent; never runs in CI)",
+  "slow: takes more than a few seconds",
+]

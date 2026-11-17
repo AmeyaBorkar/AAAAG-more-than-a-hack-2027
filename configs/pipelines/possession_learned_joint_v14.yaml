@@ -1,0 +1,48 @@
+# Candidate v14 (#86, E99): v12 with the W networks. Each production network is pretrained on the 44 installed PFF FC
+# World Cup 2022 train-split games (d_model 128, 6000 steps, raw ball, control labels; PR #196), then trained with the
+# E56a recipe on all seven IDSSE matches, then fine-tuned with E92 C (dead_visible_p 0.2, 2000 steps); seeds 2-4.
+# On three fold-seed pairs against E84 F (v12's recipe), pooled: declared +0.0036, S8@8 +0.011, mix50 +0.0155,
+# hidden restarts +0.0152, visible dead +0.0138, Metrica +0.0034 / +0.0109; clean provider -0.0046 (#86 comment 6829031881).
+# Candidate v12 (#86, E84): v11b with each production network fine-tuned from its own weights on the visible
+# uncarried dead ball (dead_visible_p 0.2, 1000 steps, lr 5e-4, seed s+100; WiSE-FT arm F at alpha 1.0). On three
+# fold-seed pairs against E56a: dv +0.057 to +0.062, declared +0.002 to +0.007, mix50 +0.031 pooled.
+# Candidate v11b (#86, E72 + E72b): v11 with the dead-gated decoder's dead_threshold 0.30 instead of 0.4. On the E56a
+# network the lower threshold gains +0.003 declared on four independent fold-seed pairs (Metrica +0.001 to +0.004).
+# Candidate v11 (#86, E65 stage 2): v10 with the E56a recipe retrained on all seven IDSSE matches after the sealed
+# exam (the five dev matches plus J03WQQ and J03WN1), production seeds 0-2. Adopted only under the E65 rule.
+# Candidate v10 (#86, E56a adjudication): v9 with the E56a network. E56a is E29b trained with restart_blank: in the
+# coupled variant the ball also stays hidden around half of the true restarts, because on BAR-ATH the ball
+# is often missing at tagged set pieces (measured label-free). Adjudicated over three fold-seed pairs against E29b (v8 post-process):
+# hidden restarts +0.0131, declared score -0.0017, worst pooled Metrica game -0.0037.
+name: possession_learned_joint_v14
+description: >
+  Candidate v14 (#86): v12 with the E99 W production networks (PFF-pretrained, d_model 128, E56a recipe, E92 C fine-tune). v12 (#86): v11b with the E84 fine-tuned production networks (visible dead ball, from their own weights). v11b (#86): v11 with dead_threshold 0.30 (E72, E72b). v11 (#86): v10 retrained on seven IDSSE matches after the exam (E65). v10 (#86): v9 with the E56a network (E29b plus restart_blank training, three seeds on the five IDSSE dev matches). v9: v8 with keep_restart (E61): the spell that opens play after a stoppage is kept. v8: v7 with pre_kickoff_dead moved first (E55b), so a possession the cut leaves behind meets
+  the touch snap and the convention step like any other. v7: v5 plus D before each opening kick-off (E55). v5: v4 with the controlled-possession rule. E29b: control memory plus the contact columns (E17), the possessor head (E18) and a learned
+  switch head (E19), trained with wide ball smoothing (E28), three seeds trained on the five IDSSE dev matches
+  (logits averaged) and two mirrored views, both heads through
+  factorised fusion, the dead-gated semi-Markov decoder with a 0.4 dead threshold and a switch bonus at weight 2,
+  then the gaining-team touch snap and the controlled-possession rule (controlled_spell 1.5, E40c; it equals min_spell 1.5 where no pass is seen). Dev
+  (leave-one-match-out fold models, seeds 5-9) against E19: clean -0.0004 (seeds 0+1) and -0.0046 (seeds 2+3)
+  on the three-truth mean; on an 8-frame-smoothed ball (S8, a smoothing stress) +0.061 and +0.057. The fall-back stays possession_control_v1_hw12; v3 stays a YAML swap.
+evidence:
+- name: learned_team
+  params:
+    backend: numpy
+    weights: [models/e99w_all7_seed2.json, models/e99w_all7_seed3.json, models/e99w_all7_seed4.json]
+    sha256: [a7d050af13f13674, 9947134f92563c87, c32c2041df5482a5]
+    output: joint
+    views: 2
+    workers: 4
+fusion:
+  name: factorised
+  params: {dead_from: [learned_team], team_from: [learned_team]}
+decoder:
+  name: dead_gated_hsmm
+  params: {lam_team: 0.6, beta: 0.0, refine_s: 0.0, dead_threshold: 0.3, switch_weight: 2.0}
+postprocess:
+- name: pre_kickoff_dead
+  params: {source: anchors}
+- name: touch_snap
+  params: {window_s: 2.0}
+- name: controlled_spell
+  params: {hold_s: 1.5, reach_m: 1.0, min_players: 2, min_sep_m: 0.0, keep_restart: true}

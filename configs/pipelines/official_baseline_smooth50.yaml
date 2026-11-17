@@ -1,0 +1,12 @@
+name: official_baseline_smooth50
+description: >
+  Exact reproduction of the organisers' published floor (starter/baseline.py, window +/-50, spellF1
+  0.2433 on the full match): nearest tracked player to the ball, no ball -> D, centred majority
+  vote over the whole video. The reference point every other pipeline is measured against.
+evidence:
+  - name: nearest_player
+    params: {when_unseen: dead}
+fusion: first
+decoder:
+  name: majority_vote
+  params: {half_window: 50, per_period: false, outside: keep}

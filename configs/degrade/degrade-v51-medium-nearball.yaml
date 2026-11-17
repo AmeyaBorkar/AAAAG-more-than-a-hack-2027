@@ -1,0 +1,11 @@
+name: v51-medium-nearball
+description: >
+  degrade-v5.1 player ladder, the harsher medium variant (#73): as "medium", with the dropout
+  hazard twice as high while a player is within 5 m of the seen ball. Physical priors fixed before
+  any run, calibrated on external data only (ADR 2026-11-05).
+dropout_share: 0.10
+dropout_mean_s: 2.0
+noise_sigma_m: 0.25
+noise_smooth_s: 0.25
+near_ball_factor: 2.0
+near_ball_m: 5.0

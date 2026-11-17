@@ -1,0 +1,27 @@
+name: possession_learned_joint_v1
+description: >
+  Candidate v1 (#86): v0's two learned heads plus a small last-controller rule hedge on the team
+  log-odds (E13: weight 0.1; the rule carries an unbounded memory the network lacks), decoded by the
+  dead-gated semi-Markov decoder (E1c: the vote's stoppages, then the explicit-duration segmentation
+  of H/A, lam_team 0.6, beta 0). No rule-based ball state. `weights` is a list when a seed ensemble
+  is used (logits averaged); each file is pinned by `sha256`. The fall-back stays
+  `possession_control_v1_hw12`.
+evidence:
+- name: learned_team
+  params:
+    weights: [models/learned_joint_v0.pt]
+    sha256: [1d8b97d49d223100]
+    device: cpu
+    threads: 1
+    output: joint
+- name: control_possession
+  params: {reach_m: 1.0, hold_frames: 3}
+fusion:
+  name: factorised
+  params:
+    dead_from: [learned_team]
+    team_from: [learned_team, control_possession]
+    team_weights: {control_possession: 0.1}
+decoder:
+  name: dead_gated_hsmm
+  params: {lam_team: 0.6, beta: 0.0, refine_s: 0.0}

@@ -1,0 +1,18 @@
+# The champion: the pipeline `python -m aaaag submit` turns into AAAAG.csv.
+# Change it ONLY through a champion PR (docs/VALIDATION.md#champion-protocol): evidence from the
+# primary validation suite, plausible label-free diagnostics, smoke PASS, one review.
+# Champion: candidate v15 = v14 with weight-soup networks (1/2 E99 W + 1/2 the E120 A25G25 fine-tune, E129b SG)
+# and the E136 decode (switch_weight 1.5, touch_snap window 0.25 s); R16 on three fold-seed pairs (#86).
+# v14 = v12 with the E99 W networks: pretrained on PFF FC World Cup 2022
+# train-split games, then the E56a recipe and the E92 C fine-tune on IDSSE (passed on three fold-seed pairs, #86).
+# v12 = v11b with each production network fine-tuned from its own weights on the
+# visible uncarried dead ball (E84 arm F, passed on three fold-seed pairs, #86).
+# v11b = v11 with the decoder's dead_threshold 0.30 (E72, confirmed by E72b, #86).
+# v11 = v10 retrained on all seven IDSSE matches after the sealed exam (E65 stage 2, #86).
+pipeline: configs/pipelines/possession_learned_joint_v15.yaml
+
+# Set at code freeze to the SHA-256 of the file we upload; `submit` then verifies that a fresh
+# rebuild reproduces it byte for byte (RULES.md section 3).
+# Code freeze, 17 Nov: v15, the same bytes from cold builds on two machines (Arnav at 1 and 8
+# threads; three builds on Ameya's laptop; #215).
+expected_sha256: c57e6e7762864ca736cc339bdc49af1b399c9c259dfcfb93eca98e67d8e30cf2

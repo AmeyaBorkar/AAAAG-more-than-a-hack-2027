@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "AAAAG: frame-level ball possession from automatic tracking"
+abstract: >-
+  Team AAAAG's submission to More than a Hack 2027, Phase 1 (ball possession). A network
+  trained only on other matches gives per-frame possession and dead-ball probabilities from
+  automatic tracking, and a dead-gated semi-Markov decoder with controlled-possession rules turns
+  them into possessions. Inference runs in numpy on a CPU and rebuilds the submitted file byte
+  for byte.
+authors:
+  - name: "Team AAAAG"
+  - given-names: "Ameya"
+  - given-names: "Arnav"
+  - given-names: "Bakshi"
+  - given-names: "Ayush"
+version: "v15"
+date-released: "2026-11-17"
+license: MIT
+# Set to the public repository's URL when it is created.
+repository-code: "https://github.com/AmeyaBorkar/AAAAG-more-than-a-hack-2027"
+keywords:
+  - football
+  - soccer
+  - ball possession
+  - tracking data
+  - sports analytics
+  - More than a Hack 2027
+references:
+  - type: data
+    title: "More than a Hack 2027: Frame-level Ball Possession"
+    authors:
+      - name: "Metrica Sports"
+      - name: "Barça Innovation Hub"
+    repository-code: "https://github.com/metrica-sports/more-than-a-hack-2027"
+    license: MIT
+    version: "1.0.0"
+    date-released: "2026-10-20"

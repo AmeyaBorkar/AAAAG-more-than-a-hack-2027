@@ -1,0 +1,10 @@
+name: synthetic-v1
+description: >
+  Five seeded synthetic matches. Plumbing, contracts and determinism only -- realism is low by
+  design, so NEVER choose between models on this suite (docs/VALIDATION.md).
+matches:
+  - {name: synthetic, params: {seed: 0}}
+  - {name: synthetic, params: {seed: 1}}
+  - {name: synthetic, params: {seed: 2}}
+  - {name: synthetic, params: {seed: 3}}
+  - {name: synthetic, params: {seed: 4}}

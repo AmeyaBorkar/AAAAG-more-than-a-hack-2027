@@ -1,0 +1,19 @@
+name: possession_learned_joint_v1_nohedge
+description: >
+  v1 without the last-controller hedge (#86, E14): the two learned heads and the dead-gated
+  semi-Markov decoder only. Used to ask whether a network that reads the rule's control memory as an
+  input still gains from the post-hoc hedge. `weights` is a list when a seed ensemble is used.
+evidence:
+- name: learned_team
+  params:
+    weights: [models/learned_joint_v0.pt]
+    sha256: [1d8b97d49d223100]
+    device: cpu
+    threads: 1
+    output: joint
+fusion:
+  name: factorised
+  params: {dead_from: [learned_team], team_from: [learned_team]}
+decoder:
+  name: dead_gated_hsmm
+  params: {lam_team: 0.6, beta: 0.0, refine_s: 0.0}

@@ -1,0 +1,27 @@
+name: possession_learned_team_baseline
+description: >
+  #82 baseline: possession_snap_05s with the team factor from `learned_team` (src/aaaag/ml, a
+  network trained on the IDSSE dev matches degraded on the fly) in place of `control_possession`.
+  The ball-state producer, fusion and decoder are the champion's. `weights` is the file
+  `python -m aaaag.ml train --holdout none` writes; it is not tracked, so a run needs it in place
+  (and, once it is shipped, `sha256` pinned). The leave-one-match-out numbers swap the fold models
+  in programmatically (src/aaaag/ml/evaluate.py).
+evidence:
+- name: learned_team
+  params: {weights: models/team_baseline.pt, device: cpu, threads: 1}
+- name: ballstate
+  params:
+    weights: {ball_missing: 1.0}
+    ball_missing:
+      bounds_s: [0.5, 2.0, 5.0, 10.0]
+      llr: [-5.573, -0.616, 1.886, 3.423, 6.476]
+      closed: right
+    snap_to_ball_gaps_s: 0.5
+fusion:
+  name: factorised
+  params:
+    dead_from: [ballstate]
+    team_first_from: [ballstate]
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 12, min_dead_s: 2.0, min_alive_s: 1.0}

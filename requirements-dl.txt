@@ -1,0 +1,43 @@
+# The deep-learning environment for src/aaaag/ml (issue #82): the exact pins the harness was built
+# and tested with. It is NOT the submission environment: requirements-lock.txt has no torch, and
+# adding torch there is a deliberate team decision (docs/ml/README.md, "Decisions this leaves open").
+#
+# Create it next to the repository, not inside it, on CPython 3.13:
+#   py -3.13 -m venv ../venvs/aaaag-dl
+#   ../venvs/aaaag-dl/Scripts/python -m pip install -r requirements-dl.txt
+# (Linux/macOS: bin/python.) The CUDA wheel below needs an NVIDIA GPU and driver for CUDA 12.8;
+# for a CPU-only machine install torch from the CPU index instead:
+#   pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cpu
+# Inference on the CPU (what the submit step would run) does not need the GPU build, but bit-exact
+# equality between the two wheels was not tested.
+--extra-index-url https://download.pytorch.org/whl/cu128
+
+torch==2.11.0+cu128
+
+# what src/aaaag imports (same pins as requirements-lock.txt except pandas, 3.1.1 here)
+numpy==2.5.4
+pandas==3.1.1
+PyYAML==6.0.3
+scipy==1.18.1
+python-dateutil==4.0.0
+tzdata==2026.6
+
+# torch's own dependencies
+filelock==4.2.4
+fsspec==2026.9.0
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+mpmath==1.3.0
+networkx==3.7
+setuptools==78.1.0
+sympy==1.14.0
+typing_extensions==4.16.0
+
+# tests and lint (the same as requirements-lock.txt)
+colorama==0.4.6
+iniconfig==2.3.1
+packaging==26.3
+pluggy==1.7.0
+Pygments==2.21.0
+pytest==9.1.1
+ruff==0.17.3

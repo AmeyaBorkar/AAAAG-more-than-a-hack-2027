@@ -1,0 +1,23 @@
+name: possession_missing_v1
+description: '#62 arm A: possession_control_v1_hw12 with the ballstate `ball_missing` cue at weight 1.0:
+  each frame of an unseen-ball run gets the LLR of the run''s length, fitted on the three Metrica games
+  only by analysis/scripts/ballstate_ball_missing_fit.py --write (v5''s rule 3, one-frame pseudo-counts).
+  Do not edit the LLRs by hand.'
+evidence:
+- name: control_possession
+  params: {reach_m: 1.0, hold_frames: 3}
+- name: ballstate
+  params:
+    weights: {ball_missing: 1.0}
+    ball_missing:
+      bounds_s: [0.5, 2.0, 5.0, 10.0]
+      llr: [-5.573, -0.616, 1.886, 3.423, 6.476]
+      closed: right
+fusion:
+  name: factorised
+  params:
+    dead_from: [ballstate]
+    team_first_from: [ballstate]
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 12, min_dead_s: 2.0, min_alive_s: 1.0}

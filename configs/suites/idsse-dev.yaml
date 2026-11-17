@@ -1,0 +1,33 @@
+name: idsse-dev-v2
+description: >
+  THE SELECTOR (docs/VALIDATION.md, Tier 1): the five IDSSE dev matches x five seeds of degrade-v2,
+  i.e. the ball dropped in BAR-ATH-like blocks with context-dependent starts, a frozen ball counted
+  as open play (configs/degrade/degrade-v2.yaml, issue #21). Track slots stay clean. Provisional
+  until the adversarial realism check (arnav-10) is reported. Fetch first:
+  python -m aaaag.sources.idsse J03WMX J03WOH J03WOY J03WPY J03WR9
+matches:
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WMX, degrade: {version: '2', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WOH, degrade: {version: '2', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WOY, degrade: {version: '2', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WPY, degrade: {version: '2', seed: 4}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '2', seed: 0}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '2', seed: 1}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '2', seed: 2}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '2', seed: 3}}}
+  - {name: idsse, params: {match_id: J03WR9, degrade: {version: '2', seed: 4}}}

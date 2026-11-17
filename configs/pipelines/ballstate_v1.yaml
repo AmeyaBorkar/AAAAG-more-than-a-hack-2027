@@ -1,0 +1,16 @@
+name: ballstate_v1
+description: >
+  Baseline possession evidence (nearest player, abstaining without a ball) plus the ball-state
+  lane's P(dead) and restart team, fused factor by factor (P(dead) from ballstate, P(home | alive)
+  from both) and decoded with stoppages first, then the baseline's +/-50 team vote inside alive
+  play. Compare against official_baseline_smooth50 on the IDSSE dev suites.
+evidence:
+  - name: nearest_player
+    params: {when_unseen: abstain}
+  - name: ballstate
+fusion:
+  name: factorised
+  params: {dead_from: [ballstate]}
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 50, min_dead_s: 2.0, min_alive_s: 1.0}

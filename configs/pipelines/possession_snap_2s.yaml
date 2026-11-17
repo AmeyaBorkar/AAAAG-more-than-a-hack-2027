@@ -1,0 +1,23 @@
+name: possession_snap_2s
+description: '#66 arm A, not adopted (lost on idsse-dev-v5-j2): possession_missing_v1 with each stoppage''s edges snapped onto the
+  overlapping unseen-ball run (ballstate snap_to_ball_gaps_s = 2 s; snap.py). The ball_missing LLRs are
+  possession_missing_v1''s, fitted on Metrica only.'
+evidence:
+- name: control_possession
+  params: {reach_m: 1.0, hold_frames: 3}
+- name: ballstate
+  params:
+    weights: {ball_missing: 1.0}
+    ball_missing:
+      bounds_s: [0.5, 2.0, 5.0, 10.0]
+      llr: [-5.573, -0.616, 1.886, 3.423, 6.476]
+      closed: right
+    snap_to_ball_gaps_s: 2.0
+fusion:
+  name: factorised
+  params:
+    dead_from: [ballstate]
+    team_first_from: [ballstate]
+decoder:
+  name: dead_gated_vote
+  params: {half_window: 12, min_dead_s: 2.0, min_alive_s: 1.0}
